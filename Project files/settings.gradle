@@ -1,0 +1,2 @@
+rootProject.name='Konwerter  Walut'
+include ':app'
