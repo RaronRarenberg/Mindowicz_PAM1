@@ -14,6 +14,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -53,9 +54,10 @@ public class MainActivity extends AppCompatActivity {
         request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
         request.setTitle("Pobieranie");
         request.setTitle("Pobieram kursy walut");
-        r
+        request.allowScanningByMediaScanner();
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        Long reference = dm.enqueue(request);
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,"bum"+ System.currentTimeMillis()); //time stamp dodany do nazwy pliku
+        dm.enqueue(request);
     }
 
     public void Rezultat_Otrzymanego_Pozwolenia(int kod_pozwolenia, @NonNull String[] pozwolenie, @NonNull int[] rezultaty_pozwolenia)
