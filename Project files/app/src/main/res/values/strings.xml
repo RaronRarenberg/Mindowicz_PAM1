@@ -1,4 +1,16 @@
 <resources>
     <string name="app_name">Konwerter  Walut</string>
     <string name="download">Pobierz Kursy Walut</string>
+    <string name="next_activity">DALEJ</string>
+    <string name="string_do_xml">start</string>
+    <string-array name="planets_array">
+        <item>Mercury</item>
+        <item>Venus</item>
+        <item>Earth</item>
+        <item>Mars</item>
+        <item>Jupiter</item>
+        <item>Saturn</item>
+        <item>Uranus</item>
+        <item>Neptune</item>
+    </string-array>
 </resources>

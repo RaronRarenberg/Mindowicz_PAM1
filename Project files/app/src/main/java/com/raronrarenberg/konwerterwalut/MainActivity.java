@@ -16,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -24,12 +25,26 @@ public class MainActivity extends AppCompatActivity {
     private static final int PERMISSION_STORAGE_CODE = 1000;
     long id_w_kolejce;
     DownloadManager dm;
+    private Button przycisk_do_walut;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        przycisk_do_walut = (Button) findViewById(R.id.button2);
+        przycisk_do_walut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                Otworz_Activity_Konwersji();
+            }
+        });
+    }
 
+    public void Otworz_Activity_Konwersji()
+    {
+        Intent intent = new Intent(this,KonwersjaWalut.class);
+        startActivity(intent);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -56,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         request.setTitle("Pobieram kursy walut");
         request.allowScanningByMediaScanner();
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,"bum"+ System.currentTimeMillis()); //time stamp dodany do nazwy pliku
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,"tabela");
         dm.enqueue(request);
     }
 
