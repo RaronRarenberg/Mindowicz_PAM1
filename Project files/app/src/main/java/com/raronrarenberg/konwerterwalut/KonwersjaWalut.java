@@ -3,15 +3,19 @@ package com.raronrarenberg.konwerterwalut;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -21,10 +25,27 @@ public class KonwersjaWalut extends AppCompatActivity {
 
     private String mTekst;
     private TextView mTekstPokaz;
-    public void DoIt(View view)
-    {
-        mTekstPokaz.setText(mTekst);
-        System.out.println(mTekst);
+
+    public void DoIt(View view) throws Exception {
+
+        DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+
+        try {
+            DocumentBuilder builder = builderFactory.newDocumentBuilder();
+            Document doc = builder.parse("https://www.nbp.pl/kursy/xml/a051z200313.xml");
+            NodeList namelist = (NodeList) doc.getElementById("1");
+
+
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+        //mTekst = "lol";//dokument.getDocumentElement().getNodeName();
+        //mTekstPokaz.setText(mTekst);
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,21 +55,6 @@ public class KonwersjaWalut extends AppCompatActivity {
 
         //PARSOWANIE XML'A
 
-
-        try
-        {
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder buder = factory.newDocumentBuilder();
-            Document dokument = buder.parse("content://com.android.externalstorage.documents/document/primary%3ADownload%2Ftabela");
-            mTekst = dokument.getDocumentElement().getNodeName();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
-            e.printStackTrace();
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        }
 
         //Spinnerowa czesc
         Spinner lista_walut = (Spinner) findViewById(R.id.lista_walut);
