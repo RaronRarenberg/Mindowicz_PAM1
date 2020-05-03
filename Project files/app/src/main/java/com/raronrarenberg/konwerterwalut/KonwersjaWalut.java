@@ -1,13 +1,21 @@
 package com.raronrarenberg.konwerterwalut;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -23,37 +31,54 @@ import javax.xml.parsers.ParserConfigurationException;
 
 public class KonwersjaWalut extends AppCompatActivity {
 
+    private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 12;
     private String mTekst;
     private TextView mTekstPokaz;
 
-    public void DoIt(View view) throws Exception {
+    public void DoIt(View view) throws Exception
+    {
 
-        DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+        //PARSOWANIE XML'A
+        String path = Environment.getExternalStorageDirectory().toString()+"/Download";
+        Log.d("Files", "Path: " + path);
+        File directory = new File(path);
+        File[] files = directory.listFiles();
+        Log.d("Files", "Size: "+ files.length);
+        for (int i = 0; i < files.length; i++)
+        {
+            Log.d("Files", "FileName:" + files[i].getName());
+        }
 
-        try {
-            DocumentBuilder builder = builderFactory.newDocumentBuilder();
-            Document doc = builder.parse("https://www.nbp.pl/kursy/xml/a051z200313.xml");
-            NodeList namelist = (NodeList) doc.getElementById("1");
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission granted and now can proceed
 
 
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(KonwersjaWalut.this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+            // add other cases for more permissions
         }
     }
-        //mTekst = "lol";//dokument.getDocumentElement().getNodeName();
-        //mTekstPokaz.setText(mTekst);
-    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_konwersja_walut);
         mTekstPokaz = findViewById(R.id.siemka);
 
-        //PARSOWANIE XML'A
 
 
         //Spinnerowa czesc
