@@ -1,5 +1,8 @@
+04.05.2020 UPDATE
+-Android upiera sie zeby nie dac mi dostepu do mojego pliku mimo roznych prob uzyskania pozwolenia na odczyt
+-Koncept tego jak konwertowac dane jest gotowy i czeka na implementacje
 13.04.2020 UPDATE
--mam problem z parsowaniem xml'a, nie  mog� przekaza� �cie�ki do pliku  z tabel�
+-mam problem z parsowaniem xml'a, nie  mogę przekazać ścieżki do pliku  z tabelą
 27.03.2020 UPDATE
--aplikacja pobiera tabelę z kursami ze strony NBP po wciśnięciu przycisku
--tabela jest zapisywana w pamięci telefonu
+-aplikacja pobiera tabelÄ™ z kursami ze strony NBP po wciĹ›niÄ™ciu przycisku
+-tabela jest zapisywana w pamiÄ™ci telefonu
