@@ -45,9 +45,11 @@ public class KonwersjaWalut extends AppCompatActivity {
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 12;
     private String mTekst;
     private TextView mTekstPokaz;
+    Map<String, List<String>> waluty = new HashMap<>();
 
     public void DoIt(View view) throws Exception
     {
+
 
 
     }
@@ -80,11 +82,14 @@ public class KonwersjaWalut extends AppCompatActivity {
         setContentView(R.layout.activity_konwersja_walut);
 
         XmlParser parser_xml = new XmlParser();
-        List<XmlParser.Pozycja> pozycje = null;
+        List<XmlParser.Pozycja> pozycje = new ArrayList<>();
 
-        Map<String, List<String>> waluty = new HashMap<>(); //slownik z walutami, nazwa_waluty to klucz a reszta to wartosci
+         //slownik z walutami, nazwa_waluty to klucz a reszta to wartosci
         List<String> wartosci = new ArrayList<>(); //wartosci do slownika
         List<String> nazwy_walut = new ArrayList<>();
+        Spinner lista_walut = (Spinner) findViewById(R.id.lista_walut);
+        Spinner lista_walut2 = (Spinner) findViewById(R.id.lista_walut2);
+
 
         //sciezka do pliku xml
         String destination = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/";
@@ -133,11 +138,12 @@ public class KonwersjaWalut extends AppCompatActivity {
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,nazwy_walut);
         //Spinnerowa czesc
-        Spinner lista_walut = (Spinner) findViewById(R.id.lista_walut);
+
 
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         lista_walut.setAdapter(adapter);
+        lista_walut2.setAdapter(adapter);
     }
 }

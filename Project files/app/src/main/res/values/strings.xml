@@ -3,6 +3,10 @@
     <string name="download">Pobierz Kursy Walut</string>
     <string name="next_activity">DALEJ</string>
     <string name="string_do_xml">start</string>
+    <string name="konwertuj">Konwertuj</string>
+    <string name="konwertuj_z">Konwertuj z waluty:</string>
+    <string name="konwertuj_na">Docelowa waluta:</string>
+    <string name="wprowadz_ilosc">Wprowadź kwotę:</string>
     <string-array name="planets_array">
         <item>Mercury</item>
         <item>Venus</item>
