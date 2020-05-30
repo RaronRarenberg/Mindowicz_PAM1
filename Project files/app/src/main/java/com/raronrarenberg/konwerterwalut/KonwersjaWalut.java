@@ -7,12 +7,15 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,10 +23,18 @@ import android.widget.Toast;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -38,16 +49,6 @@ public class KonwersjaWalut extends AppCompatActivity {
     public void DoIt(View view) throws Exception
     {
 
-        //PARSOWANIE XML'A
-        String path = Environment.getExternalStorageDirectory().toString()+"/Download";
-        Log.d("Files", "Path: " + path);
-        File directory = new File(path);
-        File[] files = directory.listFiles();
-        Log.d("Files", "Size: "+ files.length);
-        for (int i = 0; i < files.length; i++)
-        {
-            Log.d("Files", "FileName:" + files[i].getName());
-        }
 
     }
     @Override
@@ -77,15 +78,63 @@ public class KonwersjaWalut extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_konwersja_walut);
-        mTekstPokaz = findViewById(R.id.siemka);
 
+        XmlParser parser_xml = new XmlParser();
+        List<XmlParser.Pozycja> pozycje = null;
 
+        Map<String, List<String>> waluty = new HashMap<>(); //slownik z walutami, nazwa_waluty to klucz a reszta to wartosci
+        List<String> wartosci = new ArrayList<>(); //wartosci do slownika
+        List<String> nazwy_walut = new ArrayList<>();
 
+        //sciezka do pliku xml
+        String destination = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/";
+        String fileName = "tabela.xml";
+        destination += fileName;
+        final Uri uri = Uri.parse(destination);
+        //koniec sciezki
+        InputStream in = null;
+        try {
+            in = new FileInputStream(String.valueOf(uri));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+
+            pozycje = parser_xml.parse(in);
+            //Log.e("p", String.valueOf(pozycje));
+            for (XmlParser.Pozycja pozycja : pozycje)
+            {
+                wartosci.add(pozycja.przelicznik);
+                wartosci.add(pozycja.kod_waluty);
+                wartosci.add(pozycja.kurs_sredni);
+                waluty.put(pozycja.nazwa_waluty,wartosci);
+                nazwy_walut.add(pozycja.nazwa_waluty);
+                wartosci.clear();
+
+            }
+            Log.e("waluty",waluty.keySet().toString());
+
+            // ListView listView = (ListView) findViewById(R.id.list_view);
+            //listView.setAdapter(adapter);
+
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally{
+            if(in != null){
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,nazwy_walut);
         //Spinnerowa czesc
         Spinner lista_walut = (Spinner) findViewById(R.id.lista_walut);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.planets_array,
-                android.R.layout.simple_spinner_item);
+
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner

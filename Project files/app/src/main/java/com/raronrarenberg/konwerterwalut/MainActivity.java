@@ -5,16 +5,19 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -61,18 +64,33 @@ public class MainActivity extends AppCompatActivity {
             Pobierz_Waluty();
         }
     }
+    //https://www.nbp.pl/kursy/xml/a051z200313.xml
     public void Pobierz_Waluty()
     {
-        dm = (DownloadManager)getSystemService(Context.DOWNLOAD_SERVICE);
-        Uri uri = Uri.parse("https://www.nbp.pl/kursy/xml/a051z200313.xml");
-        DownloadManager.Request request = new DownloadManager.Request(uri);
-        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
-        request.setTitle("Pobieranie");
-        request.setTitle("Pobieram kursy walut");
-        request.allowScanningByMediaScanner();
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,"tabela");
-        dm.enqueue(request);
+        String destination = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/";
+        String fileName = "tabela.xml";
+        destination += fileName;
+        final Uri uri = Uri.parse("file://" + destination);
+
+        String url = "https://www.nbp.pl/kursy/xml/a051z200313.xml"; //paste url here
+
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+        request.setDescription("Pobieram kursy walut....");
+        request.setTitle(" POBIERANIE ");
+        request.setDestinationUri(uri);
+
+        final DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+        final long downloadId = manager.enqueue(request);
+
+        final String finalDestination = destination;
+        BroadcastReceiver onComplete = new BroadcastReceiver() {
+            public void onReceive(Context ctxt, Intent intent) {
+                Log.d("Update status", "Download completed");
+                unregisterReceiver(this);
+            }
+        };
+
+        registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
     }
 
     public void Rezultat_Otrzymanego_Pozwolenia(int kod_pozwolenia, @NonNull String[] pozwolenie, @NonNull int[] rezultaty_pozwolenia)
