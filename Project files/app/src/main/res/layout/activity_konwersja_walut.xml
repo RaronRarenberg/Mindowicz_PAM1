@@ -12,6 +12,7 @@
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="30sp"
         android:text="@string/konwertuj_z" />
 
     <Spinner
@@ -20,12 +21,14 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:textSize="30sp"
         tools:layout_editor_absoluteX="1dp" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="30sp"
         android:text="@string/konwertuj_na" />
 
     <Spinner
@@ -34,18 +37,21 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:textSize="30sp"
         tools:layout_editor_absoluteX="1dp" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="30sp"
         android:text="@string/wprowadz_ilosc" />
-    
+
     <EditText
-        android:id="@+id/plain_text_input"
+        android:id="@+id/text_input"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:textSize="30sp"
         android:inputType="text"/>
 
     <Button
@@ -53,9 +59,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="DoIt"
+        android:textSize="30sp"
         android:text="@string/konwertuj" />
 
-
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:text="@string/wynik_konwersji" />
 
 
 </LinearLayout>

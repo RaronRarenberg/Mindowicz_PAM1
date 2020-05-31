@@ -15,6 +15,7 @@ import android.provider.DocumentsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -45,12 +46,36 @@ public class KonwersjaWalut extends AppCompatActivity {
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 12;
     private String mTekst;
     private TextView mTekstPokaz;
-    Map<String, List<String>> waluty = new HashMap<>();
+    private EditText mEdit;
+    Map<String, List<String>> waluty = new HashMap<String, List<String>>();
 
     public void DoIt(View view) throws Exception
     {
+        TextView  wynikowy_text = (TextView) findViewById(R.id.textView4);
+        EditText kwota_edit = (EditText) findViewById(R.id.text_input);
+        Spinner lista_walut = (Spinner) findViewById(R.id.lista_walut);
+        Spinner lista_walut2 = (Spinner) findViewById(R.id.lista_walut2);
 
+        String pierwsza = lista_walut.getSelectedItem().toString();
+        String druga = lista_walut2.getSelectedItem().toString();
 
+        Double jeden =Double.parseDouble(String.valueOf(kwota_edit.getText()));
+        Integer przelicznik = Integer.parseInt(waluty.get(pierwsza).get(0));
+
+        String str_kurs_jeden = waluty.get(pierwsza).get(2);
+        Log.e("check1",str_kurs_jeden);
+        str_kurs_jeden= str_kurs_jeden.replaceAll(",",".");
+        Log.e("check2",str_kurs_jeden);
+        Double kurs_jeden = Double.parseDouble(str_kurs_jeden);
+
+        String str_kurs_dwa = waluty.get(druga).get(2);
+        str_kurs_dwa = str_kurs_dwa.replaceAll(",",".");
+        Double kurs_dwa = Double.parseDouble(str_kurs_dwa);
+
+        Double dwa = jeden / przelicznik;
+        dwa = dwa * kurs_jeden;
+        dwa = dwa / kurs_dwa;
+        wynikowy_text.setText(Double.toString(dwa));
 
     }
     @Override
@@ -85,8 +110,8 @@ public class KonwersjaWalut extends AppCompatActivity {
         List<XmlParser.Pozycja> pozycje = new ArrayList<>();
 
          //slownik z walutami, nazwa_waluty to klucz a reszta to wartosci
-        List<String> wartosci = new ArrayList<>(); //wartosci do slownika
-        List<String> nazwy_walut = new ArrayList<>();
+         //wartosci do slownika
+        List<String> nazwy_walut = new ArrayList<String>();
         Spinner lista_walut = (Spinner) findViewById(R.id.lista_walut);
         Spinner lista_walut2 = (Spinner) findViewById(R.id.lista_walut2);
 
@@ -109,12 +134,14 @@ public class KonwersjaWalut extends AppCompatActivity {
             //Log.e("p", String.valueOf(pozycje));
             for (XmlParser.Pozycja pozycja : pozycje)
             {
+                List<String> wartosci = new ArrayList<String>();
                 wartosci.add(pozycja.przelicznik);
                 wartosci.add(pozycja.kod_waluty);
                 wartosci.add(pozycja.kurs_sredni);
+
                 waluty.put(pozycja.nazwa_waluty,wartosci);
                 nazwy_walut.add(pozycja.nazwa_waluty);
-                wartosci.clear();
+                //wartosci.clear();
 
             }
             Log.e("waluty",waluty.keySet().toString());

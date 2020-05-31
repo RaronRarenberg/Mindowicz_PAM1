@@ -7,6 +7,7 @@
     <string name="konwertuj_z">Konwertuj z waluty:</string>
     <string name="konwertuj_na">Docelowa waluta:</string>
     <string name="wprowadz_ilosc">Wprowadź kwotę:</string>
+    <string name="wynik_konwersji">Kwota po konwersji</string>
     <string-array name="planets_array">
         <item>Mercury</item>
         <item>Venus</item>
